@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  controller:
+    image: ubuntu
+    container_name: controller
+    ports:
+      - "8080:80"
+    networks:
+      - meu-cluster
+
+  node1:
+    image: ubuntu
+    container_name: node1
+    
+    networks:
+      - meu-cluster
+    ports:
+      - "5000:5000"
+    extra_hosts:
+      - "controller:192.168.0.10"
+    volumes:
+      - ./node1-data:/data
+
+  node2:
+    image: ubuntu
+    container_name: node2
+  
+    networks:
+      - meu-cluster
+    ports:
+      - "5001:5000"
+    extra_hosts:
+      - "controller:192.168.0.10"
+    volumes:
+      - ./node2-data:/data
+
+networks:
+  meu-cluster:
+    driver: bridge
